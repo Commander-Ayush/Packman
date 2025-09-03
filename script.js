@@ -29,10 +29,27 @@ window.onload = function(){
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
+    loadImage();
     loadMap();
-    console.log(walls.size);
-    console.log(coins.size);
-    console.log(ghosts.size);
+    update();
+}
+
+function update(){
+    //move();
+    draw();
+    setTimeout(update, 50);
+}
+
+function draw(){
+    context.drawImage(pacman.image, pacman.xCoordinate, pacman.yCoordinate, pacman.blockWidth, pacman.blockHeight);
+    for(let ghost of ghosts.values()){
+        context.drawImage(ghost.image, ghost.xCoordinate, ghost.yCoordinate, ghost.blockWidth, ghost.blockHeight )
+    }
+    for(let wall of walls.values()){
+        context.drawImage(wall.image, wall.xCoordinate, wall.yCoordinate, wall.blockWidth, wall.blockHeight);
+    }
+    
+
 }
 
 
@@ -66,7 +83,7 @@ function loadImage(){
     pacmanUpImage.src = "./pacmanUp.png"
 
     pacmanRightImage = new Image();
-    pacmanRightImage.src = "./pacmanRight";
+    pacmanRightImage.src = "./pacmanRight.png";
 }
 
 //<--------------------Tile Map--------------------->
@@ -133,7 +150,7 @@ function loadMap(){
                 ghosts.add(ghost);
             }
             else if(tileMapChar == "P"){ //Pacman
-                pacman = new Block(pacmanRightImage, xPosition, yPosition, tileSize, tileSize);
+                pacman = new Block(pacmanLeftImage, xPosition, yPosition, tileSize, tileSize);
             }
             else if(tileMapChar == " "){ //Coins
                 const coin = new Block(null, xPosition+14, yPosition+14, 4, 4);
